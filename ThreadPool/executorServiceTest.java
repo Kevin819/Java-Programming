@@ -31,13 +31,24 @@ public class executorServiceTest {
 		});
 		try {
 			// String result = executorService.invokeAny(callables);
-      // System.out.println("result = " + result);    // result = Task 1 or 2 or 3
 			List<Future<String>> result = executorService.invokeAll(callables);
 			System.out.println(
 					"result = " + result.get(0).get() + ", " + result.get(1).get() + ", " + result.get(2).get());
-      // "result = Task 1, Task 3, Task 2" will be printed.
+
+			test_submitRunnable(executorService);
 		} catch (Exception ex) {
 		}
 		executorService.shutdown();
+
+	}
+
+	private static void test_submitRunnable(ExecutorService executorService) throws Exception {
+		Future<?> future = executorService.submit(new Runnable() {
+			public void run() {
+				System.out.println("Asynchronous task");
+			}
+		});
+		// 如果任务结束执行则返回 null
+		System.out.println("future.get()=" + future.get());
 	}
 }
